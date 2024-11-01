@@ -1,4 +1,4 @@
-import { assertEquals } from "@std/assert";
+import { assertEquals, assertRejects } from "@std/assert";
 import { Cache } from "./mod.ts";
 
 Deno.test(function testSet() {
@@ -39,5 +39,20 @@ Deno.test(function testCompare() {
 
     cache.set("Hello", "World")
     assertEquals(cache.contains("hello"), true);
+});
+
+Deno.test(async function testFetch() {
+    const square = (n: number) => n * n;
+
+    let cache = new Cache<number, number>({
+        fetch: (n: number): Promise<number> => {
+            return Promise.resolve(square(n));
+        },
+    });
+
+    assertEquals(await cache.fetch(1), 1);
+
+    cache = new Cache<number, number>();
+    assertRejects(async () => await cache.fetch(1));
 });
 
