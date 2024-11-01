@@ -41,8 +41,8 @@ export type Entry<Key, Value> = {
  * A small Time-to-Live (TTL) Cache implementation.
  */
 export class Cache<Key, Value, Context = void> {
-    private readonly options: Options<Key, Value, Context>;
-    private readonly entries: Array<Entry<Key, Value>> = [];
+    readonly options: Options<Key, Value, Context>;
+    private entries: Array<Entry<Key, Value>> = [];
     private static readonly npos = -1; 
 
     constructor(options?: Partial<Options<Key, Value, Context>>) {
@@ -134,6 +134,10 @@ export class Cache<Key, Value, Context = void> {
             return true;
         }
         return false;
+    }
+
+    clear(): void {
+        this.entries = [];
     }
 }
 
